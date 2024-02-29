@@ -19,7 +19,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "My Application"
+rootProject.name = "CARP-3003"
 include(":app")
 include(":data")
 include(":domain")
