@@ -22,6 +22,16 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 
+[bundles]
+presentation = [
+    "androidx-core-ktx",
+    "androidx-appcompat",
+    "material",
+    "androidx-constraintlayout",
+    "androidx-navigation-fragment-ktx",
+    "androidx-navigation-ui-ktx"
+]
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
