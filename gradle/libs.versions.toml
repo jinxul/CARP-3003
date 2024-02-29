@@ -35,6 +35,9 @@ presentation = [
     "androidx-navigation-ui-ktx",
     "hilt-android",
 ]
+domain = [
+    "hilt-android",
+]
 data = [
     "hilt-android",
 ]
