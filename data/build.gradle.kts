@@ -38,6 +38,7 @@ dependencies {
 
     implementation(libs.bundles.data)
     kapt(libs.hilt.compiler)
+    implementation(platform(libs.okhttp.bom))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
