@@ -7,13 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import com.givekesh.parstasmim.codechallenge.BR
-import com.givekesh.parstasmim.codechallenge.R
 import com.givekesh.parstasmim.codechallenge.databinding.FragmentBooksBinding
-import com.givekesh.parstasmim.codechallenge.domain.model.book.response.Book
 import com.givekesh.parstasmim.codechallenge.domain.util.DataState
-import com.givekesh.parstasmim.codechallenge.util.BookDiffUtil
-import com.givekesh.parstasmim.codechallenge.util.GenericAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
@@ -28,11 +23,11 @@ class BooksFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
-    private var _booksAdapter: GenericAdapter<Book>? = null
-    private val booksAdapter: GenericAdapter<Book> get() = _booksAdapter!!
-
+    private var _booksAdapter: BooksAdapter? = null
+    private val booksAdapter: BooksAdapter get() = _booksAdapter!!
 
     private var booksJob: Job? = null
+    private var resultMessageJob: Job? = null
     private val viewModel: BooksViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -47,26 +42,40 @@ class BooksFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupViews()
-        subscribeObserver()
+        subscribeObservers()
         getBooks()
     }
 
     private fun setupViews() {
-        _booksAdapter = GenericAdapter(
-            layoutResId = R.layout.item_book,
-            bindingVariableId = BR.book,
-            diffCallBack = BookDiffUtil
-        )
+        _booksAdapter = BooksAdapter()
         binding.booksList.adapter = booksAdapter
     }
 
-    private fun subscribeObserver() {
+    private fun subscribeObservers() {
+        subscribeObserverForBooks()
+        subscribeObserverForResultMessage()
+    }
+
+    private fun subscribeObserverForBooks() {
         booksJob = viewLifecycleOwner.lifecycleScope.launch {
             viewModel.dataState.collectLatest { dataState ->
                 when (dataState) {
                     DataState.Idle -> Unit
                     DataState.Loading -> Unit
                     is DataState.Successful -> booksAdapter.updateItems(dataState.data)
+                    is DataState.Failed -> Unit
+                }
+            }
+        }
+    }
+
+    private fun subscribeObserverForResultMessage() {
+        resultMessageJob = viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.resultMessageDataState.collectLatest { dataState ->
+                when (dataState) {
+                    DataState.Idle -> Unit
+                    DataState.Loading -> Unit
+                    is DataState.Successful -> getBooks()
                     is DataState.Failed -> Unit
                 }
             }
@@ -82,6 +91,8 @@ class BooksFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        resultMessageJob?.cancel()
+        resultMessageJob = null
         booksJob?.cancel()
         booksJob = null
         _booksAdapter = null
