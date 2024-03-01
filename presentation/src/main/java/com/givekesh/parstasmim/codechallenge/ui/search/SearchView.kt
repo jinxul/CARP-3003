@@ -85,11 +85,15 @@ private fun PreviewSearchItemView() {
                 id = "123",
                 title = "Book Name",
                 author = "Book Author",
+                genre = "Book Genre",
+                yearPublished = 2024,
             ),
             Book(
                 id = "456",
                 title = "Book Name 2",
                 author = "Book Author 2",
+                genre = "Book Genre 2",
+                yearPublished = 2024,
             ),
         )
     )
