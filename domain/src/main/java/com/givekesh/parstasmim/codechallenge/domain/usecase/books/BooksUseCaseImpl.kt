@@ -19,4 +19,14 @@ internal class BooksUseCaseImpl @Inject constructor(
                 .also { emit(DataState.Successful(it)) }
         }
     )
+
+    override fun deleteBook(bookId: String): Flow<DataState<Boolean>> = safeFlow(
+        apiCall = { booksRepository.deleteBook(bookId) },
+        block = { apiResponse ->
+            when {
+                apiResponse.status.equals("error", false) -> DataState.Failed(apiResponse.message)
+                else -> DataState.Successful(true)
+            }.also { emit(it) }
+        }
+    )
 }
