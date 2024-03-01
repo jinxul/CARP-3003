@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.givekesh.parstasmim.codechallenge.BR
@@ -33,6 +34,7 @@ class BooksFragment : Fragment() {
 
 
     private var booksJob: Job? = null
+    private val viewModel: BooksViewModel by activityViewModels()
     private val viewModel: BooksViewModel by viewModels()
 
     override fun onCreateView(

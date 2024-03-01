@@ -1,6 +1,6 @@
 [versions]
 agp = "8.2.2"
-kotlin = "1.9.0"
+kotlin = "1.9.21"
 coreKtx = "1.12.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -14,6 +14,7 @@ hilt = "2.50"
 retrofit = "2.9.0"
 okhttp = "5.0.0-alpha.12"
 moshi = "1.15.0"
+compose-bom = "2024.02.01"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,6 +34,13 @@ okhttp-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref 
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp" }
 okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor" }
 moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 [bundles]
 presentation = [
@@ -43,6 +51,12 @@ presentation = [
     "androidx-navigation-fragment-ktx",
     "androidx-navigation-ui-ktx",
     "hilt-android",
+    "compose-runtime",
+    "compose-ui",
+    "compose-foundation",
+    "compose-foundation-layout",
+    "compose-material3",
+    "compose-ui-tooling",
 ]
 domain = [
     "hilt-android",
