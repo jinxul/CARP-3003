@@ -25,6 +25,8 @@ class BooksViewModel @Inject constructor(
     private val _dataState = MutableStateFlow<DataState<List<Book>>>(DataState.Idle)
     val dataState = _dataState.asStateFlow()
 
+    val searchResult = mutableListOf<Book>()
+
     init {
         observeChannelIntent()
     }
@@ -36,8 +38,19 @@ class BooksViewModel @Inject constructor(
                     BooksIntent.GetBooks -> booksUseCase.getBooks()
                         .onEach { _dataState.value = it }
                         .launchIn(viewModelScope)
+
+                    is BooksIntent.SearchBook -> searchBook(intent.searchQuery)
                 }
             }
+        }
+    }
+
+    private fun searchBook(searchQuery: String) {
+        val booksDataState = dataState.value
+        if (booksDataState is DataState.Successful) {
+            searchResult.clear()
+            booksDataState.data.filter { it.title.contains(searchQuery) }
+                .also { searchResult.addAll(it) }
         }
     }
 
