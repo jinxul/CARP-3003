@@ -11,5 +11,7 @@ internal class BookMapper @Inject constructor(
         id = from.id,
         title = from.title,
         author = from.author,
+        genre = from.genre,
+        yearPublished = from.yearPublished,
     )
 }
