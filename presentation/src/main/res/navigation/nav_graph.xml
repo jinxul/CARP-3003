@@ -12,17 +12,17 @@
         tools:layout="@layout/fragment_books">
 
         <action
-            android:id="@+id/action_BooksFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_BooksFragment_to_SearchFragment"
+            app:destination="@id/SearchFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.givekesh.parstasmim.codechallenge.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
+        android:id="@+id/SearchFragment"
+        android:name="com.givekesh.parstasmim.codechallenge.ui.search.SearchFragment"
+        android:label="@string/search_fragment_label"
+        tools:layout="@layout/fragment_search">
 
         <action
-            android:id="@+id/action_SecondFragment_to_BooksFragment"
+            android:id="@+id/action_SearchFragment_to_BooksFragment"
             app:destination="@id/BooksFragment" />
     </fragment>
 </navigation>
