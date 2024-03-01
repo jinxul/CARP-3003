@@ -1,0 +1,49 @@
+package com.givekesh.parstasmim.codechallenge.ui.books
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.givekesh.parstasmim.codechallenge.domain.model.book.response.Book
+import com.givekesh.parstasmim.codechallenge.domain.usecase.books.BooksUseCase
+import com.givekesh.parstasmim.codechallenge.domain.util.DataState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.consumeAsFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class BooksViewModel @Inject constructor(
+    private val booksUseCase: BooksUseCase,
+) : ViewModel() {
+    private val intentChannel = Channel<BooksIntent>()
+
+    private val _dataState = MutableStateFlow<DataState<List<Book>>>(DataState.Idle)
+    val dataState = _dataState.asStateFlow()
+
+    init {
+        observeChannelIntent()
+    }
+
+    private fun observeChannelIntent() {
+        viewModelScope.launch {
+            intentChannel.consumeAsFlow().collectLatest { intent ->
+                when (intent) {
+                    BooksIntent.GetBooks -> booksUseCase.getBooks()
+                        .onEach { _dataState.value = it }
+                        .launchIn(viewModelScope)
+                }
+            }
+        }
+    }
+
+    fun processIntent(intent: BooksIntent) {
+        viewModelScope.launch {
+            intentChannel.send(intent)
+        }
+    }
+}
