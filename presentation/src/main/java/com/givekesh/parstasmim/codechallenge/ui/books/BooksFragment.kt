@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.givekesh.parstasmim.codechallenge.R
 import com.givekesh.parstasmim.codechallenge.databinding.FragmentBooksBinding
@@ -31,6 +32,7 @@ class BooksFragment : Fragment() {
     private var booksJob: Job? = null
     private var resultMessageJob: Job? = null
     private val viewModel: BooksViewModel by activityViewModels()
+    private val viewModel: BooksViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
