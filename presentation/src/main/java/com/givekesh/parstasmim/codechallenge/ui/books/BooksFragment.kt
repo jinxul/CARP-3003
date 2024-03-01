@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.givekesh.parstasmim.codechallenge.R
 import com.givekesh.parstasmim.codechallenge.databinding.FragmentBooksBinding
 import com.givekesh.parstasmim.codechallenge.domain.util.DataState
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,8 +49,26 @@ class BooksFragment : Fragment() {
     }
 
     private fun setupViews() {
-        _booksAdapter = BooksAdapter()
+        _booksAdapter = BooksAdapter(
+            onDeleteClick = { book -> deleteBook(book.id) },
+        )
         binding.booksList.adapter = booksAdapter
+    }
+
+    private fun deleteBook(bookId: String) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.delete_title)
+            .setMessage(R.string.are_you_sure)
+            .setPositiveButton(R.string.yes) { dialog, _ ->
+                viewModel.processIntent(
+                    BooksIntent.DeleteBook(bookId)
+                )
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.no) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun subscribeObservers() {

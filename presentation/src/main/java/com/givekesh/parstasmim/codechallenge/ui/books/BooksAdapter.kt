@@ -9,13 +9,15 @@ import com.givekesh.parstasmim.codechallenge.databinding.ItemBookBinding
 import com.givekesh.parstasmim.codechallenge.domain.model.book.response.Book
 import com.givekesh.parstasmim.codechallenge.util.BookDiffUtil
 
-class BooksAdapter : RecyclerView.Adapter<BooksViewHolder>() {
+class BooksAdapter(
+    private val onDeleteClick: (Book) -> Unit,
+) : RecyclerView.Adapter<BooksViewHolder>() {
     private val differ = AsyncListDiffer(this, BookDiffUtil)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BooksViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemBookBinding.inflate(inflater)
-        return BooksViewHolder(binding)
+        return BooksViewHolder(binding, onDeleteClick)
     }
 
     override fun onBindViewHolder(holder: BooksViewHolder, position: Int) {
@@ -32,10 +34,12 @@ class BooksAdapter : RecyclerView.Adapter<BooksViewHolder>() {
 
 class BooksViewHolder(
     private val binding: ItemBookBinding,
+    private val onDeleteClick: (Book) -> Unit,
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: Book, bindingVariableId: Int) {
         binding.apply {
             setVariable(bindingVariableId, item)
+            delete.setOnClickListener { onDeleteClick(item) }
         }
     }
 }
