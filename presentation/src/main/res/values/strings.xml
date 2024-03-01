@@ -4,4 +4,5 @@
     <!-- Strings used for fragments for navigation -->
     <string name="books_fragment_label">Books</string>
     <string name="search_fragment_label">Search</string>
+    <string name="search">search…</string>
 </resources>
