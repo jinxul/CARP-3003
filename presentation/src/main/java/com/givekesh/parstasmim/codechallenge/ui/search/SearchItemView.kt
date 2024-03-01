@@ -56,6 +56,8 @@ private class SearchItemPreviewParameterProvider : PreviewParameterProvider<Book
                 id = "123",
                 title = "Book Name",
                 author = "Book Author",
+                genre = "Book Genre",
+                yearPublished = 2024,
             )
         )
 }

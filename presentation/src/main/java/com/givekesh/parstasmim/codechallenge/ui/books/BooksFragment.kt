@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.givekesh.parstasmim.codechallenge.R
+import com.givekesh.parstasmim.codechallenge.databinding.DialogBookBinding
 import com.givekesh.parstasmim.codechallenge.databinding.FragmentBooksBinding
+import com.givekesh.parstasmim.codechallenge.domain.model.book.request.BookRequest
 import com.givekesh.parstasmim.codechallenge.domain.util.DataState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -52,7 +54,12 @@ class BooksFragment : Fragment() {
         _booksAdapter = BooksAdapter(
             onDeleteClick = { book -> deleteBook(book.id) },
         )
-        binding.booksList.adapter = booksAdapter
+        binding.apply {
+            booksList.adapter = booksAdapter
+            fab.setOnClickListener {
+                showAddBookDialog()
+            }
+        }
     }
 
     private fun deleteBook(bookId: String) {
@@ -69,6 +76,78 @@ class BooksFragment : Fragment() {
                 dialog.dismiss()
             }
             .show()
+    }
+
+    private fun showAddBookDialog() {
+        val binding = DialogBookBinding.inflate(layoutInflater)
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(binding.root)
+            .setTitle(R.string.add_book)
+            .show()
+
+        binding.apply {
+            positiveButton.setOnClickListener {
+                val title = bookTitleInput.text.toString()
+                val author = bookAuthorInput.text.toString()
+                val genre = bookGenreInput.text.toString()
+                val year = bookYearPublishedInput.text.toString()
+
+                if (title.isBlank()) {
+                    bookTitleInputLayout.error = getString(R.string.title_is_required)
+                    return@setOnClickListener
+                } else {
+                    bookTitleInputLayout.error = null
+                }
+
+                if (author.isBlank()) {
+                    bookAuthorInputLayout.error = getString(R.string.author_is_required)
+                    return@setOnClickListener
+                } else {
+                    bookAuthorInputLayout.error = null
+                }
+
+                if (genre.isBlank()) {
+                    bookGenreInputLayout.error = getString(R.string.genre_is_required)
+                    return@setOnClickListener
+                } else {
+                    bookGenreInputLayout.error = null
+                }
+
+                if (year.isBlank()) {
+                    bookYearPublishedInputLayout.error =
+                        getString(R.string.published_year_is_required)
+                    return@setOnClickListener
+                } else {
+                    bookYearPublishedInputLayout.error = null
+                }
+
+                val yearPublished = bookYearPublishedInput.text.toString()
+                    .filter { it.isDigit() }
+                    .toInt()
+                if (yearPublished !in 1900..2024) {
+                    bookYearPublishedInputLayout.error =
+                        getString(R.string.published_year_error_message)
+                    return@setOnClickListener
+                } else {
+                    bookYearPublishedInputLayout.error = null
+                }
+
+                val request = BookRequest(
+                    title = bookTitleInput.text.toString(),
+                    author = bookAuthorInput.text.toString(),
+                    genre = bookGenreInput.text.toString(),
+                    yearPublished = yearPublished,
+                )
+                viewModel.processIntent(
+                    BooksIntent.AddBook(request)
+                )
+                dialog.dismiss()
+            }
+
+            negativeButton.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
     }
 
     private fun subscribeObservers() {
