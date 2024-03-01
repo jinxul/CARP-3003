@@ -8,6 +8,7 @@ import javax.inject.Inject
 internal class BookMapper @Inject constructor(
 ) : ObjectToObjectMapper<BookResponse, Book> {
     override fun toObject(from: BookResponse) = Book(
+        id = from.id,
         title = from.title,
         author = from.author,
     )
