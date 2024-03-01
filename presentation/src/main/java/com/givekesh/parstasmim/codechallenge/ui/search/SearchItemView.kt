@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -35,14 +36,15 @@ fun SearchItemView(
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
             ),
-
-            )
+            color = MaterialTheme.colorScheme.onPrimary,
+        )
         Text(
             text = book.title,
             style = TextStyle(
                 fontSize = 14.sp,
                 fontStyle = FontStyle.Italic,
             ),
+            color = MaterialTheme.colorScheme.onPrimary,
         )
     }
 }
