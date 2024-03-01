@@ -11,6 +11,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.givekesh.parstasmim.codechallenge.domain.model.book.response.Book
@@ -45,15 +47,23 @@ fun SearchItemView(
     }
 }
 
+private class SearchItemPreviewParameterProvider : PreviewParameterProvider<Book> {
+    override val values: Sequence<Book>
+        get() = sequenceOf(
+            Book(
+                id = "123",
+                title = "Book Name",
+                author = "Book Author",
+            )
+        )
+}
 
 @Preview
 @Composable
-private fun PreviewSearchItemView() {
+private fun PreviewSearchItemView(
+    @PreviewParameter(SearchItemPreviewParameterProvider::class, limit = 1) book: Book,
+) {
     SearchItemView(
-        book = Book(
-            id = "123",
-            title = "Book Name",
-            author = "Book Author",
-        ),
+        book = book,
     )
 }
