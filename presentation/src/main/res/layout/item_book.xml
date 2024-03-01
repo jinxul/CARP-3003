@@ -19,9 +19,9 @@
             android:id="@+id/book_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{book.title}"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:text="@{book.title}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="book title" />
@@ -31,12 +31,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:text="@{book.author}"
             android:textSize="14sp"
             android:textStyle="italic"
-            android:text="@{book.author}"
             app:layout_constraintStart_toStartOf="@id/book_title"
             app:layout_constraintTop_toBottomOf="@id/book_title"
             tools:text="author's name" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_trash"
+            android:id="@+id/delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:layout_width="match_parent"

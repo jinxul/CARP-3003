@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface BooksUseCase {
     fun getBooks(): Flow<DataState<List<Book>>>
+    fun deleteBook(bookId: String): Flow<DataState<Boolean>>
 }

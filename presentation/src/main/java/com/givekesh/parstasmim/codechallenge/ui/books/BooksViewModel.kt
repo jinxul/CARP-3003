@@ -25,6 +25,8 @@ class BooksViewModel @Inject constructor(
     private val _dataState = MutableStateFlow<DataState<List<Book>>>(DataState.Idle)
     val dataState = _dataState.asStateFlow()
 
+    private val _resultMessageDataState = MutableStateFlow<DataState<Boolean>>(DataState.Idle)
+    val resultMessageDataState = _resultMessageDataState.asStateFlow()
 
     val searchResult = mutableListOf<Book>()
 
@@ -41,6 +43,9 @@ class BooksViewModel @Inject constructor(
                         .launchIn(viewModelScope)
 
                     is BooksIntent.SearchBook -> searchBook(intent.searchQuery)
+                    is BooksIntent.DeleteBook -> booksUseCase.deleteBook(intent.bookId)
+                        .onEach { _resultMessageDataState.value = it }
+                        .launchIn(viewModelScope)
                 }
             }
         }
