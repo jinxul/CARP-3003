@@ -38,6 +38,10 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.7"
     }
 }
 
@@ -45,12 +49,14 @@ dependencies {
 
     implementation(libs.bundles.presentation)
     kapt(libs.hilt.compiler)
+    implementation(platform(libs.compose.bom))
 
     implementation(project(":domain"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.compose.bom))
 }
 kapt {
     correctErrorTypes = true
