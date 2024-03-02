@@ -17,7 +17,7 @@ internal inline fun <reified DomainResponseType, ApiResponseType> safeFlow(
     when (val result = apiCall.invoke()) {
         is ApiResult.ApiSuccess -> block.invoke(this, result.data)
         is ApiResult.ApiError -> emit(DataState.Failed(result.errorMessage))
-        is ApiResult.ApiException -> throw result.exception
+        is ApiResult.ApiException -> emit(DataState.Failed(result.exception.toString()))
     }
 }.catch { exception ->
     val className = block.javaClass.name
