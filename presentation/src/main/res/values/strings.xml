@@ -21,4 +21,5 @@
     <string name="author_is_required">author is required</string>
     <string name="genre_is_required">genre is required</string>
     <string name="published_year_is_required">published year is required</string>
+    <string name="retry">Retry</string>
 </resources>
