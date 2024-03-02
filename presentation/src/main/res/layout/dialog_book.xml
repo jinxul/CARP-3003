@@ -11,16 +11,6 @@
         android:layout_height="wrap_content"
         app:constraint_referenced_ids="checked_out, checked_out_check_box" />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/dialog_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_book"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/book_title_input_layout"
         android:layout_width="match_parent"
@@ -28,7 +18,7 @@
         android:layout_marginTop="24dp"
         android:hint="@string/book_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dialog_title">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/book_title_input"
