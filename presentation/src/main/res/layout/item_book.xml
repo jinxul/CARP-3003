@@ -39,11 +39,20 @@
             tools:text="author's name" />
 
         <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/edit"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/ic_trash"
-            android:id="@+id/delete"
+            android:src="@drawable/ic_edit"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/delete"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_trash"
+            app:layout_constraintEnd_toStartOf="@id/edit"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View

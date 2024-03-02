@@ -58,6 +58,7 @@ private class SearchItemPreviewParameterProvider : PreviewParameterProvider<Book
                 author = "Book Author",
                 genre = "Book Genre",
                 yearPublished = 2024,
+                isCheckedOut = false,
             )
         )
 }

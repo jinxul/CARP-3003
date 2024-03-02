@@ -22,4 +22,6 @@
     <string name="genre_is_required">genre is required</string>
     <string name="published_year_is_required">published year is required</string>
     <string name="retry">Retry</string>
+    <string name="checked_out">Checked Out:</string>
+    <string name="edit_book">Edit Book</string>
 </resources>

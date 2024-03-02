@@ -51,6 +51,10 @@ class BooksViewModel @Inject constructor(
                     is BooksIntent.AddBook -> booksUseCase.addBook(intent.request)
                         .onEach { _resultMessageDataState.value = it }
                         .launchIn(viewModelScope)
+
+                    is BooksIntent.EditBook -> booksUseCase.editBook(intent.bookId, intent.request)
+                        .onEach { _resultMessageDataState.value = it }
+                        .launchIn(viewModelScope)
                 }
             }
         }

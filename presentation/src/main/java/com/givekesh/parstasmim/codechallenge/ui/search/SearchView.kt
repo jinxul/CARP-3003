@@ -87,6 +87,7 @@ private fun PreviewSearchItemView() {
                 author = "Book Author",
                 genre = "Book Genre",
                 yearPublished = 2024,
+                isCheckedOut = false,
             ),
             Book(
                 id = "456",
@@ -94,6 +95,7 @@ private fun PreviewSearchItemView() {
                 author = "Book Author 2",
                 genre = "Book Genre 2",
                 yearPublished = 2024,
+                isCheckedOut = false,
             ),
         )
     )
