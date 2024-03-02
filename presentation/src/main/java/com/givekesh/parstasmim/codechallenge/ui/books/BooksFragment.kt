@@ -18,7 +18,6 @@ import com.givekesh.parstasmim.codechallenge.domain.util.DataState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -197,21 +196,7 @@ class BooksFragment : Fragment() {
                         booksAdapter.updateItems(dataState.data)
                     }
 
-                    is DataState.Failed -> {
-                        binding.loading.isVisible = false
-                        delay(1000)
-                        Snackbar.make(
-                            requireContext(),
-                            binding.root,
-                            dataState.error,
-                            Snackbar.LENGTH_INDEFINITE
-                        )
-                            .setAction(getString(R.string.retry)) {
-                                viewModel.lastNetworkCall?.also { viewModel.processIntent(it) }
-                            }
-                            .setAnchorView(R.id.fab)
-                            .show()
-                    }
+                    is DataState.Failed -> showError(dataState.error)
                 }
             }
         }
@@ -224,26 +209,27 @@ class BooksFragment : Fragment() {
                     DataState.Idle -> Unit
                     DataState.Loading -> binding.loading.isVisible = true
                     is DataState.Successful -> getBooks()
-                    is DataState.Failed -> {
-                        binding.loading.isVisible = false
-                        delay(1000)
-                        Snackbar.make(
-                            requireContext(),
-                            binding.root,
-                            dataState.error,
-                            Snackbar.LENGTH_INDEFINITE
-                        )
-                            .setAction(getString(R.string.retry)) {
-                                viewModel.lastNetworkCall?.also { viewModel.processIntent(it) }
-                            }
-                            .setAnchorView(R.id.fab)
-                            .show()
-                    }
+                    is DataState.Failed -> showError(dataState.error)
                 }
             }
         }
     }
 
+
+    private fun showError(errorMessage: String) {
+        binding.loading.isVisible = false
+        Snackbar.make(
+            requireContext(),
+            binding.root,
+            errorMessage,
+            Snackbar.LENGTH_INDEFINITE
+        )
+            .setAction(getString(R.string.retry)) {
+                viewModel.lastNetworkCall?.also { viewModel.processIntent(it) }
+            }
+            .setAnchorView(R.id.fab)
+            .show()
+    }
 
     private fun getBooks() {
         viewModel.lastNetworkCall = BooksIntent.GetBooks
