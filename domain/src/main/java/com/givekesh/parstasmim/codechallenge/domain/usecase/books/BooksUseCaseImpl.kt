@@ -27,7 +27,7 @@ internal class BooksUseCaseImpl @Inject constructor(
         apiCall = { booksRepository.deleteBook(bookId) },
         block = { apiResponse ->
             when {
-                apiResponse.status.equals("error", false) -> DataState.Failed(apiResponse.message)
+                apiResponse.status.equals("error", true) -> DataState.Failed(apiResponse.message)
                 else -> DataState.Successful(true)
             }.also { emit(it) }
         }
@@ -40,7 +40,7 @@ internal class BooksUseCaseImpl @Inject constructor(
         },
         block = { apiResponse ->
             when {
-                apiResponse.status.equals("error", false) -> DataState.Failed(apiResponse.message)
+                apiResponse.status.equals("error", true) -> DataState.Failed(apiResponse.message)
                 else -> DataState.Successful(true)
             }.also { emit(it) }
         }
