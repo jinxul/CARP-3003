@@ -21,4 +21,9 @@ internal class BooksRepositoryImpl @Inject constructor(
     override suspend fun addBook(
         request: BookRequest
     ): ApiResult<ResultMessageResponse> = safeApiCall { booksApi.addBook(request) }
+
+    override suspend fun editBook(
+        bookId: String,
+        request: BookRequest
+    ): ApiResult<ResultMessageResponse> = safeApiCall { booksApi.editBook(bookId, request) }
 }
