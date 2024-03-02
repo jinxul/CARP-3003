@@ -191,9 +191,14 @@ class BooksFragment : Fragment() {
             viewModel.dataState.collectLatest { dataState ->
                 when (dataState) {
                     DataState.Idle -> Unit
-                    DataState.Loading -> Unit
-                    is DataState.Successful -> booksAdapter.updateItems(dataState.data)
+                    DataState.Loading -> binding.loading.isVisible = true
+                    is DataState.Successful -> {
+                        binding.loading.isVisible = false
+                        booksAdapter.updateItems(dataState.data)
+                    }
+
                     is DataState.Failed -> {
+                        binding.loading.isVisible = false
                         delay(1000)
                         Snackbar.make(
                             requireContext(),
@@ -217,9 +222,10 @@ class BooksFragment : Fragment() {
             viewModel.resultMessageDataState.collectLatest { dataState ->
                 when (dataState) {
                     DataState.Idle -> Unit
-                    DataState.Loading -> Unit
+                    DataState.Loading -> binding.loading.isVisible = true
                     is DataState.Successful -> getBooks()
                     is DataState.Failed -> {
+                        binding.loading.isVisible = false
                         delay(1000)
                         Snackbar.make(
                             requireContext(),
