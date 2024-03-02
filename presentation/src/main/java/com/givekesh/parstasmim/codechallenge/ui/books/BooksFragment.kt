@@ -13,6 +13,7 @@ import com.givekesh.parstasmim.codechallenge.databinding.DialogBookBinding
 import com.givekesh.parstasmim.codechallenge.databinding.FragmentBooksBinding
 import com.givekesh.parstasmim.codechallenge.domain.model.book.request.BookRequest
 import com.givekesh.parstasmim.codechallenge.domain.util.DataState
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
@@ -67,6 +68,7 @@ class BooksFragment : Fragment() {
             .setTitle(R.string.delete_title)
             .setMessage(R.string.are_you_sure)
             .setPositiveButton(R.string.yes) { dialog, _ ->
+                viewModel.lastNetworkCall = BooksIntent.DeleteBook(bookId)
                 viewModel.processIntent(
                     BooksIntent.DeleteBook(bookId)
                 )
@@ -138,6 +140,7 @@ class BooksFragment : Fragment() {
                     genre = bookGenreInput.text.toString(),
                     yearPublished = yearPublished,
                 )
+                viewModel.lastNetworkCall = BooksIntent.AddBook(request)
                 viewModel.processIntent(
                     BooksIntent.AddBook(request)
                 )
@@ -162,7 +165,13 @@ class BooksFragment : Fragment() {
                     DataState.Idle -> Unit
                     DataState.Loading -> Unit
                     is DataState.Successful -> booksAdapter.updateItems(dataState.data)
-                    is DataState.Failed -> Unit
+                    is DataState.Failed ->
+                        Snackbar.make(binding.root, dataState.error, Snackbar.LENGTH_LONG)
+                            .setAction(getString(R.string.retry)) {
+                                viewModel.lastNetworkCall?.also { viewModel.processIntent(it) }
+                            }
+                            .setAnchorView(R.id.fab)
+                            .show()
                 }
             }
         }
@@ -175,7 +184,16 @@ class BooksFragment : Fragment() {
                     DataState.Idle -> Unit
                     DataState.Loading -> Unit
                     is DataState.Successful -> getBooks()
-                    is DataState.Failed -> Unit
+                    is DataState.Failed -> Snackbar.make(
+                        binding.root,
+                        dataState.error,
+                        Snackbar.LENGTH_LONG
+                    )
+                        .setAction(getString(R.string.retry)) {
+                            viewModel.lastNetworkCall?.also { viewModel.processIntent(it) }
+                        }
+                        .setAnchorView(R.id.fab)
+                        .show()
                 }
             }
         }
@@ -183,6 +201,7 @@ class BooksFragment : Fragment() {
 
 
     private fun getBooks() {
+        viewModel.lastNetworkCall = BooksIntent.GetBooks
         viewModel.processIntent(
             BooksIntent.GetBooks
         )

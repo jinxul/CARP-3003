@@ -29,6 +29,7 @@ class BooksViewModel @Inject constructor(
     val resultMessageDataState = _resultMessageDataState.asStateFlow()
 
     val searchResult = mutableListOf<Book>()
+    var lastNetworkCall: BooksIntent? = null
 
     init {
         observeChannelIntent()
