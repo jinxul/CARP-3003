@@ -13,5 +13,6 @@ internal class BookMapper @Inject constructor(
         author = from.author,
         genre = from.genre,
         yearPublished = from.yearPublished,
+        isCheckedOut = from.checkedOut,
     )
 }
