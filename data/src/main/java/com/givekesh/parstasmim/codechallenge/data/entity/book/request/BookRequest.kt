@@ -13,5 +13,7 @@ data class BookRequest(
     @Json(name = "title")
     val title: String,
     @Json(name = "yearPublished")
-    val yearPublished: Int
+    val yearPublished: Int,
+    @Json(name = "checkedOut")
+    val isCheckedOut: Boolean?,
 )

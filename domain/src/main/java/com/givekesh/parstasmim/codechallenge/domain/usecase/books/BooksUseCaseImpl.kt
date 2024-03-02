@@ -45,4 +45,22 @@ internal class BooksUseCaseImpl @Inject constructor(
             }.also { emit(it) }
         }
     )
+
+    override fun editBook(bookId: String, request: BookRequest): Flow<DataState<Boolean>> =
+        safeFlow(
+            apiCall = {
+                bookRequestMapper.toObject(request)
+                    .let { booksRepository.editBook(bookId, it) }
+            },
+            block = { apiResponse ->
+                when {
+                    apiResponse.status.equals(
+                        "error",
+                        true
+                    ) -> DataState.Failed(apiResponse.message)
+
+                    else -> DataState.Successful(true)
+                }.also { emit(it) }
+            }
+        )
 }

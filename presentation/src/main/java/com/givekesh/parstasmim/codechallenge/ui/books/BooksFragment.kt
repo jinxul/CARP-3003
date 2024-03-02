@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -12,10 +13,12 @@ import com.givekesh.parstasmim.codechallenge.R
 import com.givekesh.parstasmim.codechallenge.databinding.DialogBookBinding
 import com.givekesh.parstasmim.codechallenge.databinding.FragmentBooksBinding
 import com.givekesh.parstasmim.codechallenge.domain.model.book.request.BookRequest
+import com.givekesh.parstasmim.codechallenge.domain.model.book.response.Book
 import com.givekesh.parstasmim.codechallenge.domain.util.DataState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -54,11 +57,12 @@ class BooksFragment : Fragment() {
     private fun setupViews() {
         _booksAdapter = BooksAdapter(
             onDeleteClick = { book -> deleteBook(book.id) },
+            onEditClick = { book -> showBookDialog(isEdit = true, book = book) },
         )
         binding.apply {
             booksList.adapter = booksAdapter
             fab.setOnClickListener {
-                showAddBookDialog()
+                showBookDialog(isEdit = false)
             }
         }
     }
@@ -80,14 +84,31 @@ class BooksFragment : Fragment() {
             .show()
     }
 
-    private fun showAddBookDialog() {
+    private fun showBookDialog(isEdit: Boolean, book: Book? = null) {
+        val dialogTitle = when (isEdit) {
+            true -> R.string.edit_book
+            false -> R.string.add_book
+        }
         val binding = DialogBookBinding.inflate(layoutInflater)
         val dialog = AlertDialog.Builder(requireContext())
             .setView(binding.root)
-            .setTitle(R.string.add_book)
+            .setTitle(dialogTitle)
             .show()
 
         binding.apply {
+            if (book != null) {
+                bookTitleInput.setText(book.title)
+                bookAuthorInput.setText(book.author)
+                bookGenreInput.setText(book.genre)
+                bookYearPublishedInput.setText(book.yearPublished.toString())
+                checkedOutCheckBox.isChecked = book.isCheckedOut
+                checkedOutGroup.isVisible = true
+                positiveButton.setText(R.string.edit_book)
+            } else {
+                checkedOutGroup.isVisible = false
+                positiveButton.setText(R.string.add_book)
+            }
+
             positiveButton.setOnClickListener {
                 val title = bookTitleInput.text.toString()
                 val author = bookAuthorInput.text.toString()
@@ -134,16 +155,23 @@ class BooksFragment : Fragment() {
                     bookYearPublishedInputLayout.error = null
                 }
 
+                val isCheckedOut = when (isEdit) {
+                    true -> checkedOutCheckBox.isChecked
+                    false -> null
+                }
+
                 val request = BookRequest(
                     title = bookTitleInput.text.toString(),
                     author = bookAuthorInput.text.toString(),
                     genre = bookGenreInput.text.toString(),
                     yearPublished = yearPublished,
+                    isCheckedOut = isCheckedOut,
                 )
-                viewModel.lastNetworkCall = BooksIntent.AddBook(request)
-                viewModel.processIntent(
-                    BooksIntent.AddBook(request)
-                )
+                viewModel.lastNetworkCall = when (isEdit) {
+                    true -> BooksIntent.EditBook(book!!.id, request)
+                    false -> BooksIntent.AddBook(request)
+                }.also { viewModel.processIntent(it) }
+
                 dialog.dismiss()
             }
 
@@ -165,13 +193,20 @@ class BooksFragment : Fragment() {
                     DataState.Idle -> Unit
                     DataState.Loading -> Unit
                     is DataState.Successful -> booksAdapter.updateItems(dataState.data)
-                    is DataState.Failed ->
-                        Snackbar.make(binding.root, dataState.error, Snackbar.LENGTH_LONG)
+                    is DataState.Failed -> {
+                        delay(1000)
+                        Snackbar.make(
+                            requireContext(),
+                            binding.root,
+                            dataState.error,
+                            Snackbar.LENGTH_INDEFINITE
+                        )
                             .setAction(getString(R.string.retry)) {
                                 viewModel.lastNetworkCall?.also { viewModel.processIntent(it) }
                             }
                             .setAnchorView(R.id.fab)
                             .show()
+                    }
                 }
             }
         }
@@ -184,16 +219,20 @@ class BooksFragment : Fragment() {
                     DataState.Idle -> Unit
                     DataState.Loading -> Unit
                     is DataState.Successful -> getBooks()
-                    is DataState.Failed -> Snackbar.make(
-                        binding.root,
-                        dataState.error,
-                        Snackbar.LENGTH_LONG
-                    )
-                        .setAction(getString(R.string.retry)) {
-                            viewModel.lastNetworkCall?.also { viewModel.processIntent(it) }
-                        }
-                        .setAnchorView(R.id.fab)
-                        .show()
+                    is DataState.Failed -> {
+                        delay(1000)
+                        Snackbar.make(
+                            requireContext(),
+                            binding.root,
+                            dataState.error,
+                            Snackbar.LENGTH_INDEFINITE
+                        )
+                            .setAction(getString(R.string.retry)) {
+                                viewModel.lastNetworkCall?.also { viewModel.processIntent(it) }
+                            }
+                            .setAnchorView(R.id.fab)
+                            .show()
+                    }
                 }
             }
         }

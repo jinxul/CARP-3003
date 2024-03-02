@@ -9,4 +9,5 @@ interface BooksRepository {
     suspend fun getBooks(): ApiResult<List<BookResponse>>
     suspend fun deleteBook(id: String): ApiResult<ResultMessageResponse>
     suspend fun addBook(request: BookRequest): ApiResult<ResultMessageResponse>
+    suspend fun editBook(bookId: String, request: BookRequest): ApiResult<ResultMessageResponse>
 }

@@ -7,6 +7,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -19,4 +20,10 @@ internal interface BooksApi {
 
     @POST("/books")
     suspend fun addBook(@Body request: BookRequest): Response<ResultMessageResponse>
+
+    @PATCH("/books/{id}")
+    suspend fun editBook(
+        @Path("id") id: String,
+        @Body request: BookRequest
+    ): Response<ResultMessageResponse>
 }

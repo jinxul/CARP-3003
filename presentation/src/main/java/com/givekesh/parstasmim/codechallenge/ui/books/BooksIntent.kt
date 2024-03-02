@@ -7,4 +7,5 @@ sealed class BooksIntent {
     class SearchBook(val searchQuery: String) : BooksIntent()
     class DeleteBook(val bookId: String) : BooksIntent()
     class AddBook(val request: BookRequest) : BooksIntent()
+    class EditBook(val bookId: String, val request: BookRequest) : BooksIntent()
 }

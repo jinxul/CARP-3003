@@ -5,6 +5,12 @@
     android:layout_height="wrap_content"
     android:padding="16dp">
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/checked_out_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="checked_out, checked_out_check_box" />
+
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/dialog_title"
         android:layout_width="wrap_content"
@@ -77,6 +83,24 @@
             android:maxLength="4" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/checked_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/checked_out"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@id/book_year_published_input_layout"
+        app:layout_constraintTop_toBottomOf="@id/book_year_published_input_layout" />
+
+    <CheckBox
+        android:id="@+id/checked_out_check_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/checked_out"
+        app:layout_constraintStart_toEndOf="@id/checked_out"
+        app:layout_constraintTop_toTopOf="@id/checked_out" />
+
     <Button
         android:id="@+id/positive_button"
         android:layout_width="wrap_content"
@@ -84,7 +108,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/add"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/book_year_published_input_layout" />
+        app:layout_constraintTop_toBottomOf="@id/checked_out" />
 
     <Button
         android:id="@+id/negative_button"

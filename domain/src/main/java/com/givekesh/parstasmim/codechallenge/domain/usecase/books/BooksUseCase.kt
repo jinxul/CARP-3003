@@ -9,4 +9,5 @@ interface BooksUseCase {
     fun getBooks(): Flow<DataState<List<Book>>>
     fun deleteBook(bookId: String): Flow<DataState<Boolean>>
     fun addBook(request: BookRequest): Flow<DataState<Boolean>>
+    fun editBook(bookId: String, request: BookRequest): Flow<DataState<Boolean>>
 }
